@@ -7,6 +7,7 @@ const config = require('config');
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -150,7 +151,8 @@ router.get('/user/:user_id', async (req, res) => {
 // @access  Private
 router.delete('/', auth, async (req, res) => {
   try {
-    // @todo - remove users posts
+    // Remove user posts
+    await Post.deleteMany({ user: req.user.id });
 
     // Remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
@@ -333,10 +335,14 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
 // @route   GET api/profile/github/:username
 // @desc    Get user repos from Github
 // @access  Public
-router.get('/github/:username', async(req, res) => {
+router.get('/github/:username', async (req, res) => {
   try {
     const options = {
-      uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sor=created:asc&clinet_id=${config.get('githubClientId')}&client_secret=${config.get('githubSecret')}`,
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sor=created:asc&clinet_id=${config.get(
+        'githubClientId'
+      )}&client_secret=${config.get('githubSecret')}`,
       method: 'GET',
       headers: { 'user-agent': 'node.js' }
     };
@@ -354,6 +360,6 @@ router.get('/github/:username', async(req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-})
+});
 
 module.exports = router;
