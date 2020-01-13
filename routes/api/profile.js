@@ -69,23 +69,23 @@ router.post(
     // Build profile object
     const profileFields = {};
     profileFields.user = req.user.id;
-    if (company) profileFields.company = company;
-    if (website) profileFields.website = website;
-    if (location) profileFields.location = location;
-    if (bio) profileFields.bio = bio;
-    if (status) profileFields.status = status;
-    if (githubusername) profileFields.githubusername = githubusername;
-    if (skills) {
+    if (company !== null) profileFields.company = company;
+    if (website !== null) profileFields.website = website;
+    if (location !== null) profileFields.location = location;
+    if (bio !== null) profileFields.bio = bio;
+    if (status !== null) profileFields.status = status;
+    if (githubusername !== null) profileFields.githubusername = githubusername;
+    if (skills !== null) {
       profileFields.skills = skills.split(',').map(skill => skill.trim());
     }
 
     // Build social object
     profileFields.social = {};
-    if (youtube) profileFields.social.youtube = youtube;
-    if (twitter) profileFields.social.twitter = twitter;
-    if (facebook) profileFields.social.facebook = facebook;
-    if (linkedin) profileFields.social.linkedin = linkedin;
-    if (instagram) profileFields.social.instagram = instagram;
+    if (youtube !== null) profileFields.social.youtube = youtube;
+    if (twitter !== null) profileFields.social.twitter = twitter;
+    if (facebook !== null) profileFields.social.facebook = facebook;
+    if (linkedin !== null) profileFields.social.linkedin = linkedin;
+    if (instagram !== null) profileFields.social.instagram = instagram;
 
     try {
       let profile = await Profile.findOne({ user: req.user.id });
@@ -112,7 +112,7 @@ router.post(
   }
 );
 
-// @route   POST api/profile
+// @route   GET api/profile
 // @desc    Get all profiles
 // @access  Public
 router.get('/', async (req, res) => {
@@ -125,7 +125,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// @route   POST api/profile/user/:user_id
+// @route   GET api/profile/user/:user_id
 // @desc    Get profile by user ID
 // @access  Public
 router.get('/user/:user_id', async (req, res) => {

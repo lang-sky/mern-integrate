@@ -95,17 +95,18 @@ export const createProfile = (
     };
 
     const res = await axios.post('/api/profile', formData, config);
-
+    console.log(formData);
     dispatch({
       type: GET_PROFILE,
       payload: res.data
     });
-
+    
     dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
 
-    if (!edit) {
-      history.push('/dashboard');
-    }
+    history.push('/dashboard');
+    // if (!edit) {
+    //   history.push('/dashboard');
+    // }
   } catch (err) {
     const errors = err.response.data.errors;
 
